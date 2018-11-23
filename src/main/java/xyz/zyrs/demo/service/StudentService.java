@@ -2,6 +2,7 @@ package xyz.zyrs.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.zyrs.demo.bean.Student;
 import xyz.zyrs.demo.mapper.StudentMapper;
 
@@ -24,7 +25,14 @@ public class StudentService{
         studentMapper.insert_student(student);
     }
 
+    @Transactional
     public void update_student(Student student){
+        studentMapper.update_student(student);
+
+        //模拟中间环节错误
+        int  test = 1/0;
+        //将年龄置为100
+        student.setAge(100);
         studentMapper.update_student(student);
     }
 
