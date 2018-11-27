@@ -1,9 +1,11 @@
 package xyz.zyrs.demo.bean;
 
+import java.io.Serializable;
+
 /**
  * 学生信息表
  */
-public class Student{
+public class Student implements Serializable {
     private int id;
     private  String name;
     private  int sex;

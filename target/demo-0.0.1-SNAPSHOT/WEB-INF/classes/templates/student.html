@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Student Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    table{
+        padding: 20px;
+    }
+    table caption{
+        font-weight: 700;
+        text-align: left;
+    }
+    table td,table th{
+        text-align: center;
+    }
+    .container{
+        width: 1000px;
+        height: 600px;
+        margin: 50px auto;
+     }
+</style>
+
+<body>
+
+<div class="container" id="container">
+    <table class="table table-hover">
+        <caption>
+             学生人数:<span th:text="${#lists.size(studentList)}">0</span>
+
+            <button type="button" onclick="student_add_btn()"  class="btn btn-info" data-toggle="modal" data-target="#myModal">新增学生信息</button>
+        </caption>
+        <thead>
+          <tr>
+              <th>ID</th>
+              <th>姓名</th>
+              <th>年龄</th>
+              <th>性别</th>
+              <th>介绍</th>
+              <th>操作</th>
+          </tr>
+
+        </thead>
+        <tbody>
+            <tr  th:each="student:${studentList}">
+                <td th:text="${student.id}">..</td>
+                <td th:text="${student.name}">...</td>
+                <td th:text="${student.age}">...</td>
+                <td th:text="${student.sex}==1?'男':'女'">男</td>
+                <td th:text="${student.descr}">...</td>
+                <td>
+                    <button th:title="|${student.id},${student.name},${student.age},${student.sex},${student.descr}|" type="button" class="btn btn-success student_update_btn" data-toggle="modal" data-target="#myModal">修改</button>
+                    <button type="button" class="btn btn-danger student-delete"  th:title="${student.id}">删除</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><span id="modal-title"></span>信息静态框</h4>
+            </div>
+            <form action="/student_save_modify" method="POST">
+            <div class="modal-body">
+
+                 <input type="hidden" th:value="0" id="modal-id" name="id"/>
+
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input type="text" class="form-control" id="student-name" name="name" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label >年龄</label>
+                    <input type="number" class="form-control" id="student-age" name="age" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label >性别</label>
+                    <select class="form-control" name="sex" id="student-sex">
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label >介绍</label>
+                    <input type="text" class="form-control" id="student-descr" name="descr" placeholder="">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-primary" >提交</button>
+            </div>
+          </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+
+    //修改学生信息 t: 'add '  'update'
+    function student_add_btn(){
+
+             console.log('新增学生信息...');
+             $("#modal-id").val(0);
+             $("#modal-title").text('新增');
+
+    }
+    $(".student-delete").click(function(){
+         var id = $(this).attr("title");
+         var $this = $(this);
+         if(confirm("您将删除ID：["+id+"]的学生信息？")){
+             $.ajax({
+                 type:"DELETE",
+                 url:"/student_delete",
+                 data:{"id":id},
+                 success:function(data){
+                     if(data==1){
+                         $this.parent().parent().remove();
+                     }else{
+                         alert("删除失败!");
+                     }
+                 }
+             })
+         }
+    })
+    $(".student_update_btn").click(function(){
+
+        var arr = $(this).attr('title').split(",");
+        console.log('修改学生信息...',"arr:",arr);
+
+        $("#modal-id").val(arr[0]);
+        $("#student-name").val(arr[1]);
+        $("#student-age").val(arr[2]);
+        $("#student-sex").val(arr[3]);
+        $("#student-descr").val(arr[4]);
+
+
+        $("#modal-title").text('修改');
+    })
+
+</script>
+</body>
+
+</html>

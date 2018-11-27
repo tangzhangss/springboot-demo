@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.zyrs.demo.mapper.StudentMapper">
+
+    <!-- type为实体类Student，包名已经配置，可以直接写类名 -->
+    <sql id="column">
+        id,name,sex,age,descr
+    </sql>
+
+    <select id="get_student_list_all" resultType="xyz.zyrs.demo.bean.Student">
+
+        select <include refid="column"></include>  from tbl_student
+    </select>
+
+    <delete id="delete_student">
+        delete  from tbl_student where id = #{id}
+    </delete>
+
+    <update id="update_student" parameterType="xyz.zyrs.demo.bean.Student">
+        update tbl_student set name=#{name},sex=#{sex},age=#{age},descr=#{descr} where id = #{id}
+    </update>
+
+    <insert id="insert_student" parameterType="xyz.zyrs.demo.bean.Student">
+        insert  tbl_student (name,age,sex,descr) value(#{name},#{age},#{sex},#{descr})
+    </insert>
+
+</mapper>

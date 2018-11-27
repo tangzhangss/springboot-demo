@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import xyz.zyrs.demo.bean.Student;
 import xyz.zyrs.demo.service.StudentService;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -18,8 +19,15 @@ public class StudentController {
 
     @RequestMapping(value="/student",method = RequestMethod.GET)
     public String get_student_list_all(Map<String,Object> map) {
-        map.put("studentList",studentService.get_student_list_all());
+
+        List<Student> studentList = null;
+
+        studentList = studentService.get_student_list_all();
+
+
+        map.put("studentList",studentList);
         //System.out.println("学生列表"+studentService.get_student_list_all());
+
         return "student";
     }
 
