@@ -1,5 +1,7 @@
 package xyz.zyrs.demo.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +19,12 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @RequestMapping(value="/student",method = RequestMethod.GET)
     public String get_student_list_all(Map<String,Object> map) {
+
+        logger.info("获取所有学生信息");
 
         List<Student> studentList = null;
 

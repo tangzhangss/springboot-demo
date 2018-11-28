@@ -1,0 +1,14 @@
+2018-11-28 10:27:11.642  WARN 3720 --- [http-nio-8080-exec-3] com.zaxxer.hikari.util.DriverDataSource  : Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+2018-11-28 10:27:11.851 DEBUG 3720 --- [http-nio-8080-exec-3] x.z.d.m.StudentMapper.update_student     : ==>  Preparing: update tbl_student set name=?,sex=?,age=?,descr=? where id = ? 
+2018-11-28 10:27:11.877 DEBUG 3720 --- [http-nio-8080-exec-3] x.z.d.m.StudentMapper.update_student     : ==> Parameters: 张三(String), 2(Integer), 18(Integer), 我是漳卅...(String), 10000(Integer)
+2018-11-28 10:27:11.877 DEBUG 3720 --- [http-nio-8080-exec-3] x.z.d.m.StudentMapper.update_student     : <==    Updates: 1
+2018-11-28 10:27:11.994 DEBUG 3720 --- [http-nio-8080-exec-4] x.z.d.m.S.get_student_list_all           : ==>  Preparing: select id,name,sex,age,descr from tbl_student 
+2018-11-28 10:27:11.996 DEBUG 3720 --- [http-nio-8080-exec-4] x.z.d.m.S.get_student_list_all           : ==> Parameters: 
+2018-11-28 10:27:12.038 DEBUG 3720 --- [http-nio-8080-exec-4] x.z.d.m.S.get_student_list_all           : <==      Total: 4
+2018/11/28 - 10:34:58 WARN  com.zaxxer.hikari.util.DriverDataSource- Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+2018/11/28 - 10:34:58 DEBUG xyz.zyrs.demo.mapper.StudentMapper.update_student- ==>  Preparing: update tbl_student set name=?,sex=?,age=?,descr=? where id = ? 
+2018/11/28 - 10:34:58 DEBUG xyz.zyrs.demo.mapper.StudentMapper.update_student- ==> Parameters: 张三(String), 1(Integer), 18(Integer), 我是漳卅...(String), 10000(Integer)
+2018/11/28 - 10:34:58 DEBUG xyz.zyrs.demo.mapper.StudentMapper.update_student- <==    Updates: 1
+2018/11/28 - 10:34:59 DEBUG xyz.zyrs.demo.mapper.StudentMapper.get_student_list_all- ==>  Preparing: select id,name,sex,age,descr from tbl_student 
+2018/11/28 - 10:34:59 DEBUG xyz.zyrs.demo.mapper.StudentMapper.get_student_list_all- ==> Parameters: 
+2018/11/28 - 10:34:59 DEBUG xyz.zyrs.demo.mapper.StudentMapper.get_student_list_all- <==      Total: 4
