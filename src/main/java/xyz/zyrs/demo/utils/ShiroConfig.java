@@ -1,26 +1,29 @@
 package xyz.zyrs.demo.utils;
 
-import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.springframework.cache.CacheManager;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import xyz.zyrs.demo.realm.MyShiroRealm;
 import xyz.zyrs.demo.realm.MyShiroRealmTwo;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
+
     /**
      * ShiroFilterFactoryBean 处理拦截资源文件问题。
      * 注意：单独一个ShiroFilterFactoryBean配置是或报错的，因为在
@@ -73,26 +76,48 @@ public class ShiroConfig {
         return shiroFilterFactoryBean;
     }
 
-    @Bean
-    public MyShiroRealm myShiroRealm(){
+    /**
+     * 功能增强  shiro加密方式   次数
+     * @return
+     */
+    @Bean("hashedCredentialsMatcher")
+    public HashedCredentialsMatcher hashedCredentialsMatcher () {
+        System.out.println("HashedCredentialsMatcher....");
+        HashedCredentialsMatcher  credentialsMatcher = new HashedCredentialsMatcher();
+        //加密方式
+        credentialsMatcher.setHashAlgorithmName("MD5");
+        //加密迭代次数
+        credentialsMatcher.setHashIterations(2);
+        //true加密用的hex编码，false用的base64编码
+        credentialsMatcher.setStoredCredentialsHexEncoded(true);
+
+        return credentialsMatcher;
+    }
+    @Bean("myShiroRealm")
+    public MyShiroRealm myShiroRealm(@Qualifier("hashedCredentialsMatcher") HashedCredentialsMatcher matcher){
         MyShiroRealm myShiroRealm = new MyShiroRealm();
+        myShiroRealm.setCredentialsMatcher(matcher);
         return myShiroRealm;
     }
-    @Bean
-    public MyShiroRealmTwo myShiroRealmTwo(){
+    @Bean("myShiroRealmTwo")
+    public MyShiroRealmTwo myShiroRealmTwo(@Qualifier("hashedCredentialsMatcher") HashedCredentialsMatcher matcher){
         MyShiroRealmTwo myShiroRealmTwo = new MyShiroRealmTwo();
+        myShiroRealmTwo.setCredentialsMatcher(matcher);
         return myShiroRealmTwo;
     }
 
 
+
+
     @Bean
-    public SecurityManager securityManager(){
+    public SecurityManager securityManager(@Qualifier("myShiroRealm") MyShiroRealm myShiroRealm,@Qualifier("myShiroRealmTwo") MyShiroRealmTwo myShiroRealmTwo){
         DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
 
-        // 设置realm.
-        securityManager.setRealm(myShiroRealm());
-        securityManager.setRealm(myShiroRealmTwo());
+        List<Realm> realms = new ArrayList<>();
+        realms.add(myShiroRealm);
+        realms.add(myShiroRealmTwo);
 
+        securityManager.setRealms(realms);
         //注入记住我管理器;
         securityManager.setRememberMeManager(rememberMeManager());
 
@@ -113,6 +138,7 @@ public class ShiroConfig {
         simpleCookie.setMaxAge(259200);
         return simpleCookie;
     }
+
     /**
      * cookie管理对象;
      * @return
@@ -149,23 +175,6 @@ public class ShiroConfig {
         return modularRealmAuthenticator;
     }
 
-    /**
-     * 功能增强  shiro加密方式   次数
-     * @param cacheManager
-     * @return
-     */
-    @Bean(name = "credentialsMatcher")
-    public CredentialsMatcher credentialsMatcher(CacheManager cacheManager) {
-        HashedCredentialsMatcher  credentialsMatcher = new HashedCredentialsMatcher();
-        //加密方式
-        credentialsMatcher.setHashAlgorithmName("MD5");
-        //加密迭代次数
-        credentialsMatcher.setHashIterations(2);
-        //true加密用的hex编码，false用的base64编码
-        //credentialsMatcher.setStoredCredentialsHexEncoded(false);
-
-        return credentialsMatcher;
-    }
 
 
     /**

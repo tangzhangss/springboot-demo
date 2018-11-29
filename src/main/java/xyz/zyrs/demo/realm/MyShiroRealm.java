@@ -1,22 +1,40 @@
 package xyz.zyrs.demo.realm;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MyShiroRealm extends AuthorizingRealm {
 
     /**
-     * 授权  此次不适用
+     * 授权
      * @param principalCollection
      * @return
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         System.out.println("realm 授权");
-        return null;
+
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        System.out.println(SecurityUtils.getSubject().getPrincipal());
+        //添加用户角色 --- 必要时可以从数据库中取出 - 这里时通过此realm登录的拥有admin角色
+        if(SecurityUtils.getSubject().getPrincipal().equals("admin")){
+
+            Set<String> roles = new HashSet<>();
+
+            roles.add("admin");
+
+            authorizationInfo.setRoles(roles);
+        }
+
+        return authorizationInfo;
     }
 
     /**
@@ -45,7 +63,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 
         //然后进行密码比对--从数据库中取出用户名和密码
         Object principal = "admin";
-        Object credentials = "43442676c74ae59f219c2d87fd6bad52";//admin 加密两次的值
+        Object credentials = "43442676c74ae59f219c2d87fd6bad52";//"";//admin 加密两次的值
         String realmName = getName();
 
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials,realmName);

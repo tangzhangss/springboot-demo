@@ -42,7 +42,7 @@ public class MyShiroRealmTwo extends AuthorizingRealm {
         }
         //然后进行密码比对--从数据库中取出用户名和密码
         Object principal = "admin-two";
-        Object credentials = "eaf5c9e1bf980f523381eda28d37186d";//admin-two 加密两次的值
+        Object credentials = "eaf5c9e1bf980f523381eda28d37186d";//"";//admin-two 加密两次的值
         String realmName = getName();
 
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials,realmName);

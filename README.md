@@ -13,5 +13,9 @@ springboot 学习实践 demo
 
 ##### springboot +logback 日志系统使用  2018-11-28
 
+##### springboot +shiro 权限管理 角色 MDS多次加密  记住我  2018-11-29
+
+
+![效果展示](http://zyrs-xyz.oss-cn-beijing.aliyuncs.com/upload-picture/861136242/1543472694030_447_0.jpg?x-oss-process=style/zyrs-picture-style)
 
 

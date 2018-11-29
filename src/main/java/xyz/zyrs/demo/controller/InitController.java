@@ -22,7 +22,7 @@ public class InitController {
 //            //System.out.println("认证："+currentUser.isAuthenticated()+"-记住我："+currentUser.isRemembered());
 //            if(currentUser.getPrincipal() != null){
 //                //重新查询用户数据
-//                User myUser = null;
+//                User myUser =userService.getListByUserName((String) currentUser.getPrincipal());
 //
 //                //保存用户信息
 //                map.put("current_user", myUser);

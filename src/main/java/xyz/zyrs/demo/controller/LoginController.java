@@ -23,6 +23,12 @@ public class LoginController {
     public String login() {
         return "login";
     }
+    @RequestMapping(value = "/403")
+    public String login403() {
+        //必须登出，不然无法更换账号重新登录
+        SecurityUtils.getSubject().logout();
+        return "403";
+    }
 
     //处理异常
     //如果是双reaml验证则，仅会抛出org.apache.shiro.authc.AuthenticationException这个异常
@@ -49,7 +55,7 @@ public class LoginController {
 
     @ResponseBody
     @RequestMapping("/userLogin")
-    public int userLogin(@RequestParam("username")String username, @RequestParam("password")String password, @RequestParam(value="rememberMe",defaultValue="on")String rememberMe){
+    public int userLogin(@RequestParam("username")String username, @RequestParam("password")String password, @RequestParam(value="rememberMe",defaultValue="")String rememberMe){
         System.out.println("userLogin...."+"账号:"+username+"  密码:"+password);
         Subject currentUser = SecurityUtils.getSubject();
         if(!currentUser.isAuthenticated()){
@@ -65,7 +71,6 @@ public class LoginController {
                 currentUser.login(token);
                 // System.out.println(">>>认证："+currentUser.isAuthenticated()+"-记住我："+currentUser.isRemembered());
             }catch(AuthenticationException ae){
-                System.out.println("异常:"+ae.getClass().getName());
                 throw new AuthenticationException(ae.getClass().getName());
             }
         }
