@@ -19,3 +19,17 @@ springboot 学习实践 demo
 ![效果展示](http://zyrs-xyz.oss-cn-beijing.aliyuncs.com/upload-picture/861136242/1543472694030_447_0.jpg?x-oss-process=style/zyrs-picture-style)
 
 
+##### springboot  404页面 热部署
+  
+   在templates/error 下面  加入error.html(404,403,500) 文件即可
+
+   导入依赖
+
+        <!-- 热部署模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional> <!-- 这个需要为 true 热部署才有效 -->
+        </dependency>  
+
+   设置 spring.thymeleaf.cache=false  开发环境禁用缓存
